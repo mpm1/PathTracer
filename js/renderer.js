@@ -7,7 +7,7 @@ var Renderer = function(canvas, camera = null){
     Renderer.prototype.init = function(canvas, camera){
         this.canvas = canvas;
         this.camera = camera;
-        this.context = canvas.getContext('2d');
+        this.context = canvas.getContext('webgl2');
         this.maxDepth = 100.0;
 
         this.imgBuffer = this.context.getImageData(0, 0, canvas.width, canvas.height);
