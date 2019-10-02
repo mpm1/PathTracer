@@ -1,0 +1,81 @@
+<html>
+    <head>
+        <title>Pathtrace Tester</title>
+        <script src="js/vector.js"></script>
+        <script src="js/ray.js"></script>
+        <script src="js/material.js"></script>
+        <script src="js/scene.js"></script>
+        <script src="js/camera.js"></script>
+        <script src="js/renderer.js"></script>
+    </head>
+    <body>
+        <div>
+            <canvas id="gameWindow" width="300" height="300"></canvas>
+        </div>
+
+        <script type="text/javascript">
+            // Build out scene
+            var glossMaterial = new GlossMaterial();
+            glossMaterial.reflectance[0] = 0.6;
+            glossMaterial.reflectance[1] = 1.0;
+            glossMaterial.reflectance[2] = 0.6;
+            glossMaterial.roughness = 0.7;
+
+            var waterMaterial = new Material();
+            waterMaterial.reflectance[0] = 0.5;
+            waterMaterial.reflectance[1] = 0.5;
+            waterMaterial.reflectance[2] = 0.9;
+            waterMaterial.emittance[2] = 0.05;
+            waterMaterial.roughness = 0.1;
+
+            var lightEmitter = new Material();
+            lightEmitter.emittance[0] = 1.0;
+            lightEmitter.emittance[1] = 0.9;
+            lightEmitter.emittance[2] = 0.8;
+            lightEmitter.reflectance[0] = 1.0;
+            lightEmitter.reflectance[1] = 1.0;
+            lightEmitter.reflectance[2] = 1.0;
+
+            var scene = new SceneObject();
+
+            var sphere = new Sphere(0, 0, -10.0, 5.0);
+            sphere.material = glossMaterial;
+            scene.addChild(sphere);
+
+            var largeSphere = new Sphere(40.0, -10, -80.0, 40.0);
+            largeSphere.material = waterMaterial;
+            scene.addChild(largeSphere);
+
+            var light = new Sphere(-6.0, -6.0, -6.0, 2.0);
+            light.material = lightEmitter;
+            scene.addChild(light);
+
+            var light2 = new Sphere(20.0, 70.0, -20.0, 40.0);
+            light2.material = lightEmitter;
+            scene.addChild(light2);
+        </script>
+
+        <script type="text/javascript">
+            window.requestAnimFrame = (function () {
+			    return  window.requestAnimationFrame ||
+			            window.webkitRequestAnimationFrame ||
+			            window.mozRequestAnimationFrame ||
+			            function (callback) {
+			                window.setTimeout(callback, 1000 / 60); // 30 fps otherwise
+			            };
+            })();
+            
+            var camera = new Camera();
+            var renderer = new Renderer(document.getElementById("gameWindow"), camera);
+
+            function redraw(delta){
+                requestAnimFrame(redraw);
+
+                renderer.updateBuffer(delta, scene);
+                renderer.draw();
+            }
+
+            redraw(0.0);
+        </script>
+    </body>
+</html>
