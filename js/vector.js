@@ -104,3 +104,7 @@ const Vector = function(x = 0.0, y = 0.0, z = 0.0, w = 1.0){
         return outputVector;
     }
 }
+
+var Quaternion = function(x = 0.0, y = 0.0, z = 0.0, w = 1.0){
+    return new Float32Array([x, y, z, w]);
+}

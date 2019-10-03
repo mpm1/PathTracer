@@ -4,13 +4,36 @@ var Renderer = function(canvas, camera = null){
 {
     const MaxBounce = 2;
 
+    function initGL(gl){
+        if(gl == null){
+            alert("Cannot load WebGL 2");
+            return false;
+        }
+
+        // Create the draw object
+        var buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+
+        var vertecies = new Float32Array([1.0,  1.0,  0.0,
+            -1.0,  1.0,  0.0,
+             1.0, -1.0,  0.0,
+            -1.0, -1.0,  0.0]);
+
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertecies), gl.STATIC_DRAW);
+        this.buffer;
+
+        return true;
+    }
+
     Renderer.prototype.init = function(canvas, camera){
         this.canvas = canvas;
         this.camera = camera;
         this.context = canvas.getContext('webgl2');
         this.maxDepth = 100.0;
 
-        this.imgBuffer = this.context.getImageData(0, 0, canvas.width, canvas.height);
+        if(!initGL.call(this, this.context)){
+            return null;
+        }
     }
 
     Renderer.prototype.clearBuffer = function(){
